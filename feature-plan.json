@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "current_feature": "skeleton",
+  "features": [
+    {
+      "id": "skeleton",
+      "title": "FastAPI + React skeleton with OIDC auth",
+      "status": "done",
+      "acceptance": [
+        "Backend FastAPI app runs with /health endpoint",
+        "Frontend React + Vite + TypeScript builds",
+        "Docker compose with backend, frontend, Keycloak",
+        "OIDC authorization-code flow with PKCE"
+      ],
+      "implementation": [
+        "backend/app/main.py",
+        "backend/app/api/health.py",
+        "backend/app/api/auth.py",
+        "backend/app/api/deps.py",
+        "backend/app/core/config.py",
+        "backend/app/core/security.py",
+        "backend/requirements.txt",
+        "frontend/package.json",
+        "frontend/src/main.tsx",
+        "frontend/src/App.tsx",
+        "frontend/src/api/client.ts",
+        "docker-compose.yaml",
+        "Dockerfile.backend",
+        "Dockerfile.frontend"
+      ],
+      "tests": [
+        "backend/tests/test_health.py",
+        "backend/tests/test_skills.py",
+        "backend/tests/test_learning.py",
+        "backend/tests/test_mcp.py",
+        "frontend/src/components/SkillsPage.test.tsx",
+        "frontend/src/components/LearningPage.test.tsx",
+        "frontend/src/components/MCPPage.test.tsx"
+      ]
+    },
+    {
+      "id": "skill-guide-engine",
+      "title": "Skill guide domain engine with precedence resolution",
+      "status": "done",
+      "acceptance": [
+        "Skill model with enterprise/personal/project/plugin levels",
+        "Precedence resolution: enterprise > personal > project",
+        "skillOverrides visibility control (object keyed by skill name)",
+        "API CRUD for skills with pagination/filtering"
+      ],
+      "implementation": [
+        "backend/app/models/__init__.py",
+        "backend/app/services/skill_service.py",
+        "backend/app/api/skills.py",
+        "frontend/src/hooks/useSkills.tsx",
+        "frontend/src/components/SkillsPage.tsx",
+        "frontend/src/components/SkillFormModal.tsx",
+        "frontend/src/components/OverrideFormModal.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_skills.py",
+        "frontend/src/components/SkillsPage.test.tsx"
+      ]
+    },
+    {
+      "id": "learning-paths",
+      "title": "Learning paths with progress tracking",
+      "status": "done",
+      "acceptance": [
+        "Lesson/quiz data model",
+        "Progress persistence per user",
+        "Three workflows: browse, practice, assess"
+      ],
+      "implementation": [
+        "backend/app/models/__init__.py",
+        "backend/app/api/learning.py",
+        "frontend/src/hooks/useLearning.tsx",
+        "frontend/src/components/LearningPage.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_learning.py",
+        "frontend/src/components/LearningPage.test.tsx"
+      ]
+    },
+    {
+      "id": "mcp-catalog",
+      "title": "MCP server catalog with search",
+      "status": "done",
+      "acceptance": [
+        "MCP server model with categories",
+        "Search/filter API",
+        "Frontend catalog UI"
+      ],
+      "implementation": [
+        "backend/app/models/__init__.py",
+        "backend/app/api/mcp.py",
+        "frontend/src/hooks/useMCP.tsx",
+        "frontend/src/components/MCPPage.tsx",
+        "frontend/src/components/MCPFormModal.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_mcp.py",
+        "frontend/src/components/MCPPage.test.tsx"
+      ]
+    }
+  ]
+}
