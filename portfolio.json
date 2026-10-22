@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "name": "sentinel-hub-alan-vo",
+  "owner": "ALANDVO",
+  "email": "alanvo@gmail.com",
+  "domain": "AI/ML developer tools",
+  "summary": "Work in progress: sentinel-hub-alan-vo",
+  "workflows": [
+    "Browse and manage skills across enterprise/personal/project/plugin levels with correct precedence resolution",
+    "Complete guided lessons with interactive quizzes and progress tracking",
+    "Search and filter MCP servers by category, auth type, and realtime capability"
+  ],
+  "auth": "oidc-keycloak-saml-broker",
+  "llm_providers": [
+    "openai-compatible",
+    "anthropic",
+    "gemini",
+    "ollama"
+  ],
+  "status": "work-in-progress"
+}

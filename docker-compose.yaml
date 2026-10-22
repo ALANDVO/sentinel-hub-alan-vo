@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: sentinel-hub-backend
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:///./data/sentinel.db
+      - OIDC_ISSUER_URL=http://keycloak:8080/realms/sentinel-hub
+      - OIDC_CLIENT_ID=sentinel-hub
+      - OIDC_CLIENT_SECRET=change-me
+      - OIDC_REDIRECT_URI=http://localhost:3000/callback
+      - OIDC_SCOPES=openid profile email roles
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-your-secret-key-change-in-production}
+      - JWT_ALGORITHM=RS256
+      - JWT_AUDIENCE=sentinel-hub-api
+      - LLM_PROVIDER=${LLM_PROVIDER:-}
+      - LLM_MODEL=${LLM_MODEL:-}
+      - LLM_BASE_URL=${LLM_BASE_URL:-}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - CORS_ORIGINS=http://localhost:3000
+      - DEBUG=true
+      - ENVIRONMENT=development
+    volumes:
+      - backend_data:/app/data
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      keycloak:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/health/ready', timeout=3).raise_for_status()"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    networks:
+      - sentinel-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: sentinel-hub-frontend
+    environment:
+      - VITE_API_BASE=http://localhost:3000/api
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 3s
+      start_period: 5s
+      retries: 3
+    networks:
+      - sentinel-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0
+    container_name: sentinel-hub-keycloak
+    command: start-dev --import-realm
+    environment:
+      - KC_BOOTSTRAP_ADMIN_USER=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=admin
+      - KC_DB=dev-file
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+      - ./keycloak/realm.json:/opt/keycloak/data/import/realm.json:ro
+    ports:
+      - "127.0.0.1:8080:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/health/ready"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 5
+    networks:
+      - sentinel-network
+
+volumes:
+  backend_data:
+  keycloak_data:
+
+networks:
+  sentinel-network:
+    driver: bridge
