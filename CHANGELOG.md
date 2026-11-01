@@ -1,9 +1,22 @@
 # Changelog
 
-## 1.0.0 — work-in-progress checkpoint
+## 1.1.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
 
+## [1.0.1] - 2026-10-30
+
+### Fixed
+- Backend test imports: changed `backend.app` to relative imports within app package
+- Added database initialization fixture for test database table creation
+- Frontend TypeScript build error in SkillsPage.test.tsx (missing SkillOverride type import)
+
+### Tests
+- All 18 backend tests pass (health, learning, mcp, skills)
+- All 9 frontend tests pass (SkillsPage, MCPPage, LearningPage)
+- Frontend production build succeeds
+
+## 1.0.0 — work-in-progress checkpoint
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),

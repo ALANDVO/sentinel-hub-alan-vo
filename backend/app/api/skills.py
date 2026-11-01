@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
-from backend.app.models import Skill, SkillLevel, SkillOverride, SkillVisibility
-from backend.app.services.skill_service import SkillService
-from backend.app.api.deps import get_db, get_current_user
+from ..models import Skill, SkillLevel, SkillOverride, SkillVisibility
+from ..services.skill_service import SkillService
+from ..api.deps import get_db, get_current_user
 from pydantic import BaseModel, Field, ConfigDict
 from datetime import datetime
 

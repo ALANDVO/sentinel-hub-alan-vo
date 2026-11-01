@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Body
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
-from backend.app.models import Lesson, QuizQuestion, UserProgress
-from backend.app.api.deps import get_db, get_current_user
+from ..models import Lesson, QuizQuestion, UserProgress
+from ..api.deps import get_db, get_current_user
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy import select, func
 from datetime import datetime, timezone
