@@ -1,7 +1,7 @@
 import pytest
 from httpx import AsyncClient, ASGITransport
-from backend.app.main import app
-from backend.app.core.security import token_manager
+from app.main import app
+from app.core.security import token_manager
 
 
 @pytest.mark.asyncio

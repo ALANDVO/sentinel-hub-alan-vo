@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
-from backend.app.models import MCPServer
-from backend.app.api.deps import get_db, get_current_user
+from ..models import MCPServer
+from ..api.deps import get_db, get_current_user
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy import select, func, or_
 from datetime import datetime

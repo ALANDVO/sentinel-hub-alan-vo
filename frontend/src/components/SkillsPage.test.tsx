@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { SkillsPage } from './SkillsPage';
 import { useSkills } from '../hooks/useSkills';
-import { Skill } from '../types';
+import { Skill, SkillOverride } from '../types';
 // Mock useSkills
 vi.mock('../hooks/useSkills', () => ({
   useSkills: vi.fn(),
@@ -17,7 +17,7 @@ const mockEffectiveSkills: Skill[] = [
   { id: 1, name: 'test-skill', level: 'personal', description: 'Test', namespace: null, content: null, version: null, created_at: '2024-01-01T00:00:00Z', updated_at: '2024-01-01T00:00:00Z' },
 ];
 
-const mockOverrides = [];
+const mockOverrides: SkillOverride[] = [];
 
 describe('SkillsPage', () => {
   beforeEach(() => {

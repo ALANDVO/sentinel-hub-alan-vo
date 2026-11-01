@@ -2,10 +2,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-from backend.app.core.config import settings
-from backend.app.api import health, auth, skills, learning, mcp
-from backend.app.api.deps import init_db
-from backend.app.core.security import token_manager
+from .core.config import settings
+from .api import health, auth, skills, learning, mcp
+from .api.deps import init_db
+from .core.security import token_manager
 
 
 @asynccontextmanager

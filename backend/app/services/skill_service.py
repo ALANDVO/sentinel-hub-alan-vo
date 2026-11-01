@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, or_
 from sqlalchemy.orm import selectinload
 from typing import List, Optional, Tuple
-from backend.app.models import Skill, SkillLevel, SkillOverride, SkillVisibility
+from ..models import Skill, SkillLevel, SkillOverride, SkillVisibility
 
 
 class SkillService:

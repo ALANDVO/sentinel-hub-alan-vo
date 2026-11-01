@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional
-from backend.app.core.security import token_manager, generate_pkce_pair, create_state_nonce, build_authorization_url
-from backend.app.core.config import settings
-from backend.app.api.deps import get_db
-from backend.app.models import AuditLog
+from ..core.security import token_manager, generate_pkce_pair, create_state_nonce, build_authorization_url
+from ..core.config import settings
+from ..api.deps import get_db
+from ..models import AuditLog
 from datetime import datetime, timezone
 import httpx
 import secrets

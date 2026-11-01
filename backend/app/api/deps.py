@@ -1,9 +1,9 @@
 from typing import AsyncGenerator, Optional
 from fastapi import Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
-from backend.app.core.config import settings
-from backend.app.models import Base
-from backend.app.core.security import token_manager
+from ..core.config import settings
+from ..models import Base
+from ..core.security import token_manager
 
 
 engine = create_async_engine(settings.database_url, echo=settings.debug)

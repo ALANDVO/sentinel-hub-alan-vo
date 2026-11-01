@@ -6,7 +6,7 @@ import base64
 from jose import jwt, JWTError
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
-from backend.app.core.config import settings
+from ..core.config import settings
 
 
 def generate_pkce_pair() -> tuple[str, str]:
