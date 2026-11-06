@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, or_
 from sqlalchemy.orm import selectinload
 from typing import List, Optional, Tuple
+from datetime import datetime, timezone
 from ..models import Skill, SkillLevel, SkillOverride, SkillVisibility
 
 
@@ -107,6 +108,12 @@ class SkillService:
         await self.db.commit()
         return True
     
+    def _skill_key(self, skill: Skill) -> str:
+        """Generate the unique key for a skill based on its level and namespace."""
+        if skill.level == SkillLevel.PLUGIN and skill.namespace:
+            return f"{skill.namespace}:{skill.name}"
+        return skill.name
+    
     def resolve_precedence(self, skills: List[Skill]) -> List[Skill]:
         """Resolve skill precedence: enterprise > personal > project > plugin.
         Plugin skills use namespace to avoid conflicts."""
@@ -117,18 +124,16 @@ class SkillService:
             SkillLevel.PLUGIN: 3,
         }
         
-        seen_names = set()
+        seen_keys = set()
         result = []
         
         sorted_skills = sorted(skills, key=lambda s: (level_priority[s.level], s.name))
         
         for skill in sorted_skills:
-            key = skill.name
-            if skill.level == SkillLevel.PLUGIN and skill.namespace:
-                key = f"{skill.namespace}:{skill.name}"
+            key = self._skill_key(skill)
             
-            if key not in seen_names:
-                seen_names.add(key)
+            if key not in seen_keys:
+                seen_keys.add(key)
                 result.append(skill)
         
         return result
@@ -142,13 +147,12 @@ class SkillService:
             select(SkillOverride).where(SkillOverride.skill_name == skill_name)
         )
         override = result.scalar_one_or_none()
-        
         if override:
             override.visibility = visibility
+            override.updated_at = datetime.now(timezone.utc)
         else:
             override = SkillOverride(skill_name=skill_name, visibility=visibility)
             self.db.add(override)
-        
         await self.db.commit()
         await self.db.refresh(override)
         return override
@@ -176,9 +180,11 @@ class SkillService:
         visible_skills = []
         
         for skill in skills:
-            visibility = override_map.get(skill.name, SkillVisibility.ON)
+            key = self._skill_key(skill)
+            visibility = override_map.get(key, SkillVisibility.ON)
             if visibility == SkillVisibility.OFF:
                 continue
             visible_skills.append(skill)
         
         return visible_skills
+    

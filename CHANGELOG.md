@@ -1,9 +1,20 @@
 # Changelog
 
+## 1.2.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.1.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
 
+### Fixed
+- Skill visibility overrides for plugin skills with namespaces: added `_skill_key()` helper to generate consistent keys (namespace:name format), updated `resolve_precedence()` and `apply_visibility()` to use consistent key format
+
+### Tests
+- Added `test_plugin_namespace_override` to verify plugin skill visibility override behavior
+- All 19 backend tests pass (health, learning, mcp, skills)
+- All 9 frontend tests pass (SkillsPage, MCPPage, LearningPage)
 ## [1.0.1] - 2026-10-30
 
 ### Fixed
