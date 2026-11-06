@@ -28,9 +28,10 @@ Status: done
 
 Acceptance:
 - Skill model with enterprise/personal/project/plugin levels
-- Precedence resolution: enterprise > personal > project
-- skillOverrides visibility control (object keyed by skill name)
+- Precedence resolution: enterprise > personal > project > plugin (with namespace support)
+- skillOverrides visibility control (object keyed by skill name, supports namespace:plugin format)
 - API CRUD for skills with pagination/filtering
+- Bug fix: visibility overrides now work correctly for plugin skills with namespaces
 
 Implementation: `backend/app/models/__init__.py`, `backend/app/services/skill_service.py`, `backend/app/api/skills.py`, `frontend/src/hooks/useSkills.tsx`, `frontend/src/components/SkillsPage.tsx`, `frontend/src/components/SkillFormModal.tsx`, `frontend/src/components/OverrideFormModal.tsx`
 

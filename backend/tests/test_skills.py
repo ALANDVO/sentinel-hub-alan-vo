@@ -179,6 +179,44 @@ async def test_skill_filtering(client):
     assert data["page"] == 1
     assert data["page_size"] == 2
 
+@pytest.mark.asyncio
+async def test_plugin_namespace_override(client):
+    token = token_manager.create_access_token(
+        subject="test-user",
+        roles=["user"],
+        email="test@example.com",
+    )
+    auth_headers = {"Authorization": f"Bearer {token}"}
+    
+    # Create a plugin skill with namespace
+    response = await client.post("/skills", json={
+        "name": "deploy",
+        "level": "plugin",
+        "namespace": "mycompany",
+        "description": "Plugin deploy"
+    }, headers=auth_headers)
+    assert response.status_code == 201
+    skill_id = response.json()["id"]
+    
+    # Create override for the namespaced skill
+    response = await client.post("/skills/overrides", json={
+        "skill_name": "mycompany:deploy",
+        "visibility": "off"
+    }, headers=auth_headers)
+    assert response.status_code == 201
+    
+    # Get effective skills - the plugin skill should be hidden
+    response = await client.get("/skills/effective", headers=auth_headers)
+    assert response.status_code == 200
+    effective = response.json()
+    
+    deploy_skills = [s for s in effective if s["name"] == "deploy"]
+    assert len(deploy_skills) == 0
+    
+    # Cleanup
+    await client.delete(f"/skills/{skill_id}", headers=auth_headers)
+    await client.delete("/skills/overrides/mycompany:deploy", headers=auth_headers)
+
 
 @pytest.mark.asyncio
 async def test_unauthenticated_rejected(client):
