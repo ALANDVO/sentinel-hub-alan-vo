@@ -63,3 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - .env.example with all configuration options
 - CHANGELOG.md
 - LICENSE (MIT)
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

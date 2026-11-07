@@ -63,3 +63,6 @@ Implementation: `backend/app/models/__init__.py`, `backend/app/api/mcp.py`, `fro
 
 Tests: `backend/tests/test_mcp.py`, `frontend/src/components/MCPPage.test.tsx`
 
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)
