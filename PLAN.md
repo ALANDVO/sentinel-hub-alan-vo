@@ -65,4 +65,4 @@ Tests: `backend/tests/test_mcp.py`, `frontend/src/components/MCPPage.test.tsx`
 
 ---
 
-Alan Vo · [alanvo.net](https://alanvo.net)
+Alan Vo · [alanvo.net](https://alanvo.net) · [X: @alanvoasi](https://x.com/alanvoasi)
