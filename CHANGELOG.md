@@ -1,6 +1,13 @@
 # Changelog
 
+## 1.3.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.2.0 — work-in-progress checkpoint
+
+### Added
+- Audit logging for skill override operations (create, update, delete) with user context, IP address, and user agent
 
 Partial code published for continued development. Known issues: STATUS.md.
 

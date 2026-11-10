@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
-from ..models import Skill, SkillLevel, SkillOverride, SkillVisibility
+from ..models import Skill, SkillLevel, SkillOverride, SkillVisibility, AuditLog
 from ..services.skill_service import SkillService
 from ..api.deps import get_db, get_current_user
 from pydantic import BaseModel, Field, ConfigDict
@@ -9,6 +9,27 @@ from datetime import datetime
 
 
 router = APIRouter(prefix="/skills", tags=["skills"])
+
+async def _log_audit(
+    db: AsyncSession,
+    user_id: str,
+    action: str,
+    resource_type: str,
+    resource_id: str,
+    details: dict,
+    request: Request,
+):
+    audit_log = AuditLog(
+        user_id=user_id,
+        action=action,
+        resource_type=resource_type,
+        resource_id=resource_id,
+        details=details,
+        ip_address=request.client.host if request.client else None,
+        user_agent=request.headers.get("user-agent"),
+    )
+    db.add(audit_log)
+    await db.commit()
 
 
 class SkillCreate(BaseModel):
@@ -151,9 +172,26 @@ async def create_override(
     override_data: SkillOverrideCreate,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    request: Request = None,
 ):
     service = SkillService(db)
+    # Check if override exists to determine action
+    existing = await service.get_override(override_data.skill_name)
+    action = "override_update" if existing else "override_create"
+    previous_visibility = existing.visibility.value if existing else None
     override = await service.set_override(override_data.skill_name, override_data.visibility)
+    await _log_audit(
+        db=db,
+        user_id=current_user.get("sub", "unknown"),
+        action=action,
+        resource_type="skill_override",
+        resource_id=override_data.skill_name,
+        details={
+            "visibility": override_data.visibility.value,
+            "previous_visibility": previous_visibility,
+        },
+        request=request,
+    )
     return override
 
 
@@ -184,8 +222,22 @@ async def delete_override(
     skill_name: str,
     db: AsyncSession = Depends(get_db),
     current_user: dict = Depends(get_current_user),
+    request: Request = None,
 ):
     service = SkillService(db)
+    # Get override before deleting for audit log
+    override = await service.get_override(skill_name)
+    if not override:
+        raise HTTPException(status_code=404, detail="Override not found")
+    await _log_audit(
+        db=db,
+        user_id=current_user.get("sub", "unknown"),
+        action="override_delete",
+        resource_type="skill_override",
+        resource_id=skill_name,
+        details={"previous_visibility": override.visibility.value},
+        request=request,
+    )
     success = await service.delete_override(skill_name)
     if not success:
         raise HTTPException(status_code=404, detail="Override not found")
