@@ -187,4 +187,4 @@ class SkillService:
             visible_skills.append(skill)
         
         return visible_skills
-    
+    # Added by checkpoint
