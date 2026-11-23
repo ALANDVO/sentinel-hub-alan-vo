@@ -176,6 +176,15 @@ class SkillService:
         return True
     
     def apply_visibility(self, skills: List[Skill], overrides: List[SkillOverride]) -> List[Skill]:
+        """
+        Apply visibility overrides to skills.
+
+        Visibility behavior:
+          - ON:        skill is fully visible
+          - NAME_ONLY: skill is visible (name-only display)
+          - USER_INVOCABLE_ONLY: skill is user-invocable
+          - OFF:       skill is hidden from effective list
+        """
         override_map = {o.skill_name: o.visibility for o in overrides}
         visible_skills = []
         
