@@ -187,13 +187,16 @@ class SkillService:
         """
         override_map = {o.skill_name: o.visibility for o in overrides}
         visible_skills = []
-        
+
         for skill in skills:
             key = self._skill_key(skill)
             visibility = override_map.get(key, SkillVisibility.ON)
             if visibility == SkillVisibility.OFF:
+                # OFF: skill is hidden from effective list
                 continue
+            # NAME_ONLY and USER_INVOCABLE_ONLY: skill is still visible,
+            # just with restricted display behavior (name-only or user-invocable)
             visible_skills.append(skill)
-        
+
         return visible_skills
     # Added by checkpoint

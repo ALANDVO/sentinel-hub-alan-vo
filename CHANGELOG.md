@@ -1,6 +1,14 @@
 # Changelog
 
+## 1.6.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.5.0 — work-in-progress checkpoint
+
+### Fixed
+- Enhanced `apply_visibility()` in `backend/app/services/skill_service.py` to explicitly handle all four `SkillVisibility` states (ON, NAME_ONLY, USER_INVOCABLE_ONLY, OFF) with clear documentation and behavior
+- All 19 backend tests pass, including plugin skill namespace override tests
 
 Partial code published for continued development. Known issues: STATUS.md.
 
